@@ -7,92 +7,98 @@ Diprogram oleh Aladdin Persson <aladdin.persson at hotmail dot com>
 
 * 07-11-2019 Pemrograman awal
 """
+import sys
 
-# Referecence : https://github.com/aladdinpersson/Algorithms-Collection-Python/blob/master/Algorithms/cryptology/vigenere_cipher/vigenere.py
-
-# Menentukan daftar karakter alfabet yang didukung, termasuk karakter spasi di akhir string
+# Karakter alfabet menyertakan spasi di ujungnya sesuai kode Anda
 alfabet = "abcdefghijklmnopqrstuvwxyz "
 
-# Membuat dictionary untuk memetakan setiap huruf ke indeks angka (a:0, b:1, c:2, dst)
+# Membuat dictionary untuk memetakan setiap huruf ke indeks angka (a:0, b:1, dst)
 huruf_ke_indeks = dict(zip(alfabet, range(len(alfabet))))
-# Membuat dictionary kebalikannya untuk memetakan indeks angka ke huruf kembali (0:a, 1:b, 2:c, dst)
+# Membuat dictionary kebalikannya untuk memetakan indeks angka ke huruf kembali
 indeks_ke_huruf = dict(zip(range(len(alfabet)), alfabet))
 
 
-# Fungsi untuk mengubah teks biasa menjadi teks rahasia (enkripsi)
+def buat_kunci_ulang(pesan, kunci):
+    """Fungsi pembantu untuk mengulang kunci sepanjang teks pesan asli"""
+    kunci_ulang = ""
+    index_kunci = 0
+    for karakter in pesan:
+        # Mengambil karakter kunci secara berulang (kondisional perulangan muter)
+        kunci_ulang += kunci[index_kunci % len(kunci)]
+        index_kunci += 1
+    return kunci_ulang
+
+
 def enkripsi(pesan, kunci):
-    # Menyiapkan variabel string kosong untuk menampung hasil enkripsi
+    # Menghindari error case (diubah ke lowercase agar cocok dengan dict alfabet)
+    pesan = pesan.lower()
+    kunci = kunci.lower()
+    
     terenkripsi = ""
-    # Memotong teks input menjadi beberapa bagian sepanjang ukuran string kunci
     potongan_pesan = [
         pesan[i: i + len(kunci)] for i in range(0, len(pesan), len(kunci))
     ]
 
-    # Melakukan perulangan untuk setiap potongan teks yang sudah dibagi
     for setiap_potongan in potongan_pesan:
-        # Menginisialisasi ulang indeks penunjuk karakter kunci dari angka 0
         i = 0
-        # Melakukan perulangan untuk mengambil setiap huruf di dalam satu potongan teks
         for huruf in setiap_potongan:
-            # Rumus matematika enkripsi Vigenere: (Indeks Huruf Pesan + Indeks Huruf Kunci) % 27
-            angka = (huruf_ke_indeks[huruf] +
-                     huruf_ke_indeks[kunci[i]]) % len(alfabet)
-            # Mengubah angka hasil rumus kembali menjadi huruf dan menambahkannya ke variabel hasil
-            terenkripsi += indeks_ke_huruf[angka]
-            # Menaikkan indeks penunjuk karakter kunci agar bergeser ke huruf kunci berikutnya
+            if huruf in huruf_ke_indeks:
+                angka = (huruf_ke_indeks[huruf] + huruf_ke_indeks[kunci[i]]) % len(alfabet)
+                terenkripsi += indeks_ke_huruf[angka]
+            else:
+                # Jika karakter tidak terdaftar di alfabet, biarkan utuh
+                terenkripsi += huruf
             i += 1
 
-    # Mengembalikan string teks rahasia utuh hasil enkripsi ke pemanggil fungsi
     return terenkripsi
 
 
-# Fungsi untuk mengubah teks rahasia kembali menjadi teks asli (dekripsi)
 def dekripsi(sandi, kunci):
-    # Menyiapkan variabel string kosong untuk menampung hasil dekripsi
+    sandi = sandi.lower()
+    kunci = kunci.lower()
+    
     terdekripsi = ""
-    # Memotong teks rahasia menjadi beberapa bagian sepanjang ukuran string kunci
     potongan_sandi = [
         sandi[i: i + len(kunci)] for i in range(0, len(sandi), len(kunci))
     ]
 
-    # Melakukan perulangan untuk setiap potongan teks rahasia yang sudah dibagi
     for setiap_potongan in potongan_sandi:
-        # Menginisialisasi ulang indeks penunjuk karakter kunci dari angka 0
         i = 0
-        # Melakukan perulangan untuk mengambil setiap huruf di dalam satu potongan teks rahasia
         for huruf in setiap_potongan:
-            # Rumus matematika dekripsi Vigenere: (Indeks Huruf Cipher - Indeks Huruf Kunci) % 27
-            angka = (huruf_ke_indeks[huruf] -
-                     huruf_ke_indeks[kunci[i]]) % len(alfabet)
-            # Mengubah angka hasil rumus kembali menjadi huruf teks asli dan menambahkannya ke variabel hasil
-            terdekripsi += indeks_ke_huruf[angka]
-            # Menaikkan indeks penunjuk karakter kunci agar bergeser ke huruf kunci berikutnya
+            if huruf in huruf_ke_indeks:
+                angka = (huruf_ke_indeks[huruf] - huruf_ke_indeks[kunci[i]]) % len(alfabet)
+                terdekripsi += indeks_ke_huruf[angka]
+            else:
+                terdekripsi += huruf
             i += 1
 
-    # Mengembalikan string teks asli utuh hasil dekripsi ke pemanggil fungsi
     return terdekripsi
 
 
 # Fungsi utama untuk menjalankan alur program simulasi
 def main():
-    # Menentukan string kalimat asli yang ingin dienkripsi
-    pesan = "i loove peanuts"
-    # Menentukan kata kunci pengunci sandi
-    kunci = "banana"
-    # Memanggil fungsi enkripsi untuk memproses pesan asli menggunakan kunci
+    # Menentukan string kalimat asli dan kunci sesuai contoh output permintaan Anda
+    pesan = "HALO DUNIA KRIPTOGRAFI"
+    kunci = "KUNCI"
+    
+    # Membuat representasi kunci berulang
+    kunci_berulang = buat_kunci_ulang(pesan, kunci)
+    
+    # Memproses Enkripsi & Dekripsi
     pesan_terenkripsi = enkripsi(pesan, kunci)
-    # Memanggil fungsi dekripsi untuk memproses teks rahasia menggunakan kunci yang sama
     pesan_terdekripsi = dekripsi(pesan_terenkripsi, kunci)
+    
+    # Validasi Kecocokan (Case-Insensitive untuk berjaga-jaga)
+    is_match = pesan_terdekripsi.upper() == pesan.upper()
 
-    # Menampilkan string pesan asli ke layar konsol
-    print("Pesan asli: " + pesan)
-    # Menampilkan string hasil enkripsi ke layar konsol
-    print("Pesan terenkripsi: " + pesan_terenkripsi)
-    # Menampilkan string hasil dekripsi ke layar konsol
-    print("Pesan terdekripsi: " + pesan_terdekripsi)
+    # Menampilkan output dengan format persis seperti yang Anda minta
+    print(f"Plainteks   : {pesan.upper()}")
+    print(f"Kunci       : {kunci.upper()}")
+    print(f"Kunci ulang : {kunci_berulang.upper()}")
+    print(f"Cipherteks  : {pesan_terenkripsi.upper()}")
+    print(f"Dekripsi    : {pesan_terdekripsi.upper()}")
+    print(f"Match       : {is_match}")
 
 
 if __name__ == "__main__":
-
-    # Memanggil fungsi utama untuk mengeksekusi script program
     main()
