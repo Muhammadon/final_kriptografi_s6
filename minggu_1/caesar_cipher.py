@@ -59,6 +59,17 @@ class SandiCaesar():
         return decrypted.upper() == plaintext.upper()
 
 
+# ============================================================
+# --- fungsi jmebatan ---
+def decrypt_caesar(ciphertext: str, key: int) -> str:
+    """ Wrapper untuk menyambungkan brute_force_attack.py ke OOP SandiCaesar """
+    # Instansiasi objek menggunakan teks sandi dan kunci
+    sandi_obj = SandiCaesar(pesan=ciphertext, kunci=key)
+    # Panggil method dekripsi dari class Anda
+    return sandi_obj.dekripsi()
+# ============================================================
+
+
 # Fungsi utama untuk mengatur alur jalannya program
 def main():
     # Memulai blok penanganan error untuk mengantisipasi kesalahan input
