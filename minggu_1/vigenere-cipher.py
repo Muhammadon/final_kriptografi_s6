@@ -9,89 +9,82 @@ Diprogram oleh Aladdin Persson <aladdin.persson at hotmail dot com>
 """
 import sys
 
-# Karakter alfabet menyertakan spasi di ujungnya sesuai kode Anda
-alfabet = "abcdefghijklmnopqrstuvwxyz "
 
-# Membuat dictionary untuk memetakan setiap huruf ke indeks angka (a:0, b:1, dst)
-huruf_ke_indeks = dict(zip(alfabet, range(len(alfabet))))
-# Membuat dictionary kebalikannya untuk memetakan indeks angka ke huruf kembali
-indeks_ke_huruf = dict(zip(range(len(alfabet)), alfabet))
+# Reference : https://github.com/aladdinpersson/Algorithms-Collection-Python/blob/master/Algorithms/cryptology/vigenere_cipher/vigenere.py 
+class VigenereCipher:
+    def __init__(self, kunci: str):
+        # Inisialisasi properti dasar cipher
+        self.kunci = kunci.lower()
+        self.alfabet = "abcdefghijklmnopqrstuvwxyz "
+        
+        # Membuat dictionary mapping menggunakan list comprehension / zip
+        self.huruf_ke_indeks = {huruf: indeks for indeks, huruf in enumerate(self.alfabet)}
+        self.indeks_ke_huruf = {indeks: huruf for indeks, huruf in enumerate(self.alfabet)}
 
+    def buat_kunci_ulang(self, pesan: str) -> str:
+        """Fungsi pembantu untuk mengulang kunci sepanjang teks pesan asli"""
+        kunci_ulang = ""
+        for i in range(len(pesan)):
+            kunci_ulang += self.kunci[i % len(self.kunci)]
+        return kunci_ulang
 
-def buat_kunci_ulang(pesan, kunci):
-    """Fungsi pembantu untuk mengulang kunci sepanjang teks pesan asli"""
-    kunci_ulang = ""
-    index_kunci = 0
-    for karakter in pesan:
-        # Mengambil karakter kunci secara berulang (kondisional perulangan muter)
-        kunci_ulang += kunci[index_kunci % len(kunci)]
-        index_kunci += 1
-    return kunci_ulang
+    def enkripsi(self, pesan: str) -> str:
+        pesan = pesan.lower()
+        terenkripsi = ""
+        
+        # Memotong pesan berdasarkan panjang kunci
+        potongan_pesan = [
+            pesan[i: i + len(self.kunci)] for i in range(0, len(pesan), len(self.kunci))
+        ]
 
+        for setiap_potongan in potongan_pesan:
+            for i, huruf in enumerate(setiap_potongan):
+                if huruf in self.huruf_ke_indeks:
+                    # Rumus Enkripsi: (P + K) % mod
+                    angka = (self.huruf_ke_indeks[huruf] + self.huruf_ke_indeks[self.kunci[i]]) % len(self.alfabet)
+                    terenkripsi += self.indeks_ke_huruf[angka]
+                else:
+                    terenkripsi += huruf
 
-def enkripsi(pesan, kunci):
-    # Menghindari error case (diubah ke lowercase agar cocok dengan dict alfabet)
-    pesan = pesan.lower()
-    kunci = kunci.lower()
-    
-    terenkripsi = ""
-    potongan_pesan = [
-        pesan[i: i + len(kunci)] for i in range(0, len(pesan), len(kunci))
-    ]
+        return terenkripsi
 
-    for setiap_potongan in potongan_pesan:
-        i = 0
-        for huruf in setiap_potongan:
-            if huruf in huruf_ke_indeks:
-                angka = (huruf_ke_indeks[huruf] + huruf_ke_indeks[kunci[i]]) % len(alfabet)
-                terenkripsi += indeks_ke_huruf[angka]
-            else:
-                # Jika karakter tidak terdaftar di alfabet, biarkan utuh
-                terenkripsi += huruf
-            i += 1
+    def dekripsi(self, sandi: str) -> str:
+        sandi = sandi.lower()
+        terdekripsi = ""
+        
+        potongan_sandi = [
+            sandi[i: i + len(self.kunci)] for i in range(0, len(sandi), len(self.kunci))
+        ]
 
-    return terenkripsi
+        for setiap_potongan in potongan_sandi:
+            for i, huruf in enumerate(setiap_potongan):
+                if huruf in self.huruf_ke_indeks:
+                    # Rumus Dekripsi: (C - K) % mod
+                    angka = (self.huruf_ke_indeks[huruf] - self.huruf_ke_indeks[self.kunci[i]]) % len(self.alfabet)
+                    terdekripsi += self.indeks_ke_huruf[angka]
+                else:
+                    terdekripsi += huruf
 
-
-def dekripsi(sandi, kunci):
-    sandi = sandi.lower()
-    kunci = kunci.lower()
-    
-    terdekripsi = ""
-    potongan_sandi = [
-        sandi[i: i + len(kunci)] for i in range(0, len(sandi), len(kunci))
-    ]
-
-    for setiap_potongan in potongan_sandi:
-        i = 0
-        for huruf in setiap_potongan:
-            if huruf in huruf_ke_indeks:
-                angka = (huruf_ke_indeks[huruf] - huruf_ke_indeks[kunci[i]]) % len(alfabet)
-                terdekripsi += indeks_ke_huruf[angka]
-            else:
-                terdekripsi += huruf
-            i += 1
-
-    return terdekripsi
+        return terdekripsi
 
 
-# Fungsi utama untuk menjalankan alur program simulasi
+# Fungsi utama untuk menjalankan simulasi objek
 def main():
-    # Menentukan string kalimat asli dan kunci sesuai contoh output permintaan Anda
     pesan = "HALO DUNIA KRIPTOGRAFI"
     kunci = "KUNCI"
     
-    # Membuat representasi kunci berulang
-    kunci_berulang = buat_kunci_ulang(pesan, kunci)
+    # 1. Instansiasi Objek Cipher dengan menyuntikkan Kunci
+    cipher = VigenereCipher(kunci)
     
-    # Memproses Enkripsi & Dekripsi
-    pesan_terenkripsi = enkripsi(pesan, kunci)
-    pesan_terdekripsi = dekripsi(pesan_terenkripsi, kunci)
+    # 2. Memanggil metode-metode objek
+    kunci_berulang = cipher.buat_kunci_ulang(pesan)
+    pesan_terenkripsi = cipher.enkripsi(pesan)
+    pesan_terdekripsi = cipher.dekripsi(pesan_terenkripsi)
     
-    # Validasi Kecocokan (Case-Insensitive untuk berjaga-jaga)
+    # Validasi kecocokan
     is_match = pesan_terdekripsi.upper() == pesan.upper()
 
-    # Menampilkan output dengan format persis seperti yang Anda minta
+    # Menampilkan output
     print(f"Plainteks   : {pesan.upper()}")
     print(f"Kunci       : {kunci.upper()}")
     print(f"Kunci ulang : {kunci_berulang.upper()}")
