@@ -2,7 +2,14 @@
 2 # brute_force_attack.py – Exhaustive Attack Caesar Cipher
 3 # Tugas Besar Kriptografi – Minggu 2
 4 # ============================================================
-# from minggu_2.caesar_cipher import decrypt_caesar
+
+import sys
+import os
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)
+
 from minggu_1.caesar_cipher import decrypt_caesar
 
 # Kata-kata umum sebagai referensi deteksi plainteks bermakna

@@ -1,1 +1,0 @@
-Kunci Logika: Model hanya dilatih Mengompresi pola Berusaha menggunakan data mahasiswa normal. belajar 8 semester membangun ulang Jika diberi data mahasiswa anomali menjadi inti sari pati data input (berisiko), model akan "bingung", (vektor 32 dimensi). tersebut. menghasilkan kerusakan rekonstruksi yang disebut Reconstruction Error (MSE).
