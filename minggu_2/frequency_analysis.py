@@ -48,6 +48,7 @@ class AnalisisFrekuensiCaesar:
         for huruf, pct in list(self.frekuensi_huruf.items())[:10]:
             bar = '█' * int(pct * 1.5)  # skala visual batang
             print(f' {huruf}: {pct:5.1f}% {bar}')
+            print('-' * 45)
         print()
 
     def eksekusi_serangan(self, top_n: int = 3) -> None:

@@ -62,12 +62,12 @@ class SandiCaesar():
 # ============================================================
 #                --- START FUNGSI JEBATAN ---
 # ============================================================
-def decrypt_caesar(ciphertext: str, key: int) -> str:
-    """ Wrapper untuk menyambungkan brute_force_attack.py ke OOP SandiCaesar """
-    # Instansiasi objek menggunakan teks sandi dan kunci
-    sandi_obj = SandiCaesar(pesan=ciphertext, kunci=key)
-    # Panggil method dekripsi dari class Anda
-    return sandi_obj.dekripsi()
+# def decrypt_caesar(ciphertext: str, key: int) -> str:
+#     """ Wrapper untuk menyambungkan brute_force_attack.py ke OOP SandiCaesar """
+#     # Instansiasi objek menggunakan teks sandi dan kunci
+#     sandi_obj = SandiCaesar(pesan=ciphertext, kunci=key)
+#     # Panggil method dekripsi dari class Anda
+#     return sandi_obj.dekripsi()
 # ============================================================
 #                --- END FUNGSI JEBATAN ---
 # ============================================================
