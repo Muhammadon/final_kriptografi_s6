@@ -55,8 +55,8 @@ class SandiCaesar():
     def verif(self, plaintext: str) -> bool: 
         """ Memverifikasi apakah hasil dekripsi dari cipherteks kembali ke plainteks semula """
         cipher = self.enkripsi()
-        decrypted = self.dekripsi(cipher)
-        return decrypted.upper() == plaintext.upper()
+        dekripsi = self.dekripsi(cipher)
+        return dekripsi.upper() == plaintext.upper()
 
 
 # ============================================================
