@@ -51,7 +51,7 @@ class AnalisisFrekuensiCaesar:
             print('-' * 45)
         print()
 
-    def eksekusi_serangan(self, top_n: int = 3) -> None:
+    def eksekusi_serangan(self, top_n: int = 6) -> None:
         """
         Mengeksekusi serangan analisis frekuensi.
         Asumsi: huruf paling sering dalam cipherteks ≈ huruf 'E' di plainteks.
@@ -88,8 +88,10 @@ def main():
         ciphertext_uji = sys.argv[1]
     else:
         # Cipherteks uji 1 sesuai modul
-        ciphertext_uji = ('KHOOR ZRUOG WKLV LV FUBSWR FODVV '
-                          'ZH DUH OHDUQLQJ DERXW FUBSWRJUDSKB')
+        # ciphertext_uji = ('KHOOR ZRUOG WKLV LV FUBSWR FODVV '
+        #                   'ZH DUH OHDUQLQJ DERXW FUBSWRJUDSKB')
+        # ciphertext_uji = 'KHOOR ZRUOG WKLV LV FUBSWR FODVV ZH DUH OHDUQLQJ DERXW FUBSWRJUDSKB'
+        ciphertext_uji = 'WKH TXLFN EURZQ IRA MXPSV RYHU WKH ODCB GRJ DQG WKH GRJ EDUNSV DW WKH IRA ZKLOH WKH IRA UXQV DZDB LQWR WKH IRUHVW'
         
     print(f'Cipherteks:\n{ciphertext_uji}\n')
     
